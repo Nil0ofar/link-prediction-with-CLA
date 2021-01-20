@@ -3,10 +3,11 @@ from random import randint
 
 class CLA :
 
-    def __init__(self, max_cell , penalty , reward):
+    def __init__(self, max_cell , penalty , reward , iteration):
         self._size = max_cell
         self.penalty = penalty
         self.reward = reward
+        self.iteration = iteration
         self.cells = []
         #self.cur_adj_mat = [[0 for i in range(max_cell)]for j in range(max_cell)]
         for i in range(max_cell) :
@@ -14,7 +15,7 @@ class CLA :
 
     def update(self, next_adjacency_matrix):
 
-        for it in range(1):
+        for it in range(self.iteration):
 
             for i in range(self._size):
                 self.cells[i].update_genome(next_adjacency_matrix[i])

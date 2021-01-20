@@ -1,8 +1,11 @@
 from cla import CLA
 node_num = 900
 step_num = 6
+reward = 0.04
+penalty = 0.01
+iteration = 1
 
-cla = CLA(node_num , 0.04 , 0.01)
+cla = CLA(node_num , reward , penalty , iteration)
 
 for idx in range(0 ,step_num) :
     f = open("{}.txt".format(idx), 'r')
