@@ -1,4 +1,5 @@
-from basic_structure import LA , Genome
+from la import LA
+from genome import Genome
 
 class Cell:
     def __init__(self , sz , penalty , reward):
