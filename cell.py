@@ -2,13 +2,14 @@ from la import LA
 from genome import Genome
 
 class Cell:
-    def __init__(self , sz , penalty , reward):
+    def __init__(self, sz, penalty, reward, num):
         self._size = sz
-        self.penaly = penalty
+        self.penalty = penalty
         self.reward = reward
         self.LAs = []
         self.neighbor = []
         self.chosen_neighbor = []
+        self.num = num
         for i in range(sz) :
             self.LAs.append(LA())
 
@@ -26,7 +27,7 @@ class Cell:
     def update_chosen_neighbor(self, goal):
         self.chosen_neighbor.clear()
         for other in self.neighbor:
-            if other.genome.fitness(goal) > self.genome.fitness(goal):
+            if other.genome.fitness(goal[other.num]) > self.genome.fitness(goal[self.num]):
                 self.chosen_neighbor.append(other)
 
     def __update(self, idx, choice, punish):
@@ -48,8 +49,8 @@ class Cell:
             one = 0
             zero = 0
 
-            for ne in self.chosen_neighbor :
-                if ne[idx] == 0:
+            for ne in self.chosen_neighbor:
+                if ne.genome.gene[idx] == 0:
                     zero += 1
                 else:
                     one += 1

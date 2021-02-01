@@ -9,9 +9,9 @@ class CLA :
         self.reward = reward
         self.iteration = iteration
         self.cells = []
-        #self.cur_adj_mat = [[0 for i in range(max_cell)]for j in range(max_cell)]
-        for i in range(max_cell) :
-            self.cells.append(Cell(max_cell , penalty , reward))
+        self.cur_adj_mat = [[0 for i in range(max_cell)]for j in range(max_cell)]
+        for i in range(max_cell):
+            self.cells.append(Cell(max_cell, penalty, reward, i))
 
     def update(self, next_adjacency_matrix):
 
@@ -36,7 +36,10 @@ class CLA :
         #print(greater, equal, total)
         return (greater + 0.5 * equal) / total
 
-    def predict(self , mat):
+    def __get_score(self, pair):
+        return (self.cells[pair[0]].LAs[pair[1]].probability[1] + self.cells[pair[1]].LAs[pair[0]].probability[1]) / 2
+
+    def predict(self, mat):
         missing_link = []
         non_existent_link = []
         for i in range(self._size):
@@ -57,11 +60,11 @@ class CLA :
             idx_m = randint(0, len(missing_link) - 1)
             idx_n = randint(0, len(non_existent_link) - 1)
 
-            score_m = self.cells[missing_link[idx_m][0]].LAs[missing_link[idx_m][1]].probability[1]
-            score_n = self.cells[non_existent_link[idx_n][0]].LAs[non_existent_link[idx_n][1]].probability[1]
-            if score_m > score_n :
+            score_m = self.__get_score(missing_link[idx_m])
+            score_n = self.__get_score(non_existent_link[idx_n])
+            if score_m > score_n:
                 greater += 1
-            elif score_m == score_n :
+            elif score_m == score_n:
                 equal += 1
 
         return self.__AUC(total_test , greater , equal)
