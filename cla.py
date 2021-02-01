@@ -45,16 +45,17 @@ class CLA :
         for i in range(self._size):
             for j in range(i + 1, self._size):
                 #print(self.cells[i].LAs[j].probability[1])
-                if mat[i][j] == 1:
-                    missing_link.append((i, j))
-                else:
-                    non_existent_link.append((i, j))
+                if self.cells[i].LAs[j].probability[0] > 0.5 or self.cells[j].LAs[i].probability[0] > 0.5: #non-observed
+                    if mat[i][j] == 1: #missing
+                        missing_link.append((i, j))
+                    else: #non-existent
+                        non_existent_link.append((i, j))
 
         #print(len(missing_link))
         if len(missing_link) == 0 or len(non_existent_link) == 0:
             return 0
         greater = 0
-        total_test = 10000
+        total_test = 1000
         equal = 0
         for i in range(total_test) :
             idx_m = randint(0, len(missing_link) - 1)
@@ -66,5 +67,5 @@ class CLA :
                 greater += 1
             elif score_m == score_n:
                 equal += 1
-
-        return self.__AUC(total_test , greater , equal)
+        print(total_test, greater, equal)
+        return self.__AUC(total_test, greater, equal)
