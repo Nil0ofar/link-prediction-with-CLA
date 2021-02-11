@@ -1,7 +1,6 @@
 class Genome :
-    #gene = []
 
-    def __init__(self , gene):
+    def __init__(self, gene):
         self.gene = gene
 
     def fitness(self, goal):

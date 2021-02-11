@@ -1,15 +1,14 @@
 from cell import Cell
 from random import randint
 
-class CLA :
+class CLA:
 
-    def __init__(self, max_cell , penalty , reward , iteration):
+    def __init__(self, max_cell, penalty, reward, iteration):
         self._size = max_cell
         self.penalty = penalty
         self.reward = reward
         self.iteration = iteration
         self.cells = []
-        self.cur_adj_mat = [[0 for i in range(max_cell)]for j in range(max_cell)]
         for i in range(max_cell):
             self.cells.append(Cell(max_cell, penalty, reward, i))
 
@@ -33,19 +32,17 @@ class CLA :
                     self.cells[i].neighbor.append(self.cells[j])
 
     def __AUC(self, total, greater, equal):
-        #print(greater, equal, total)
         return (greater + 0.5 * equal) / total
 
     def __get_score(self, pair):
-        return (self.cells[pair[0]].LAs[pair[1]].probability[1] + self.cells[pair[1]].LAs[pair[0]].probability[1]) / 2
+        return max(self.cells[pair[0]].LAs[pair[1]].probability[1], self.cells[pair[1]].LAs[pair[0]].probability[1])
 
     def predict(self, mat):
         missing_link = []
         non_existent_link = []
         for i in range(self._size):
             for j in range(i + 1, self._size):
-                #print(self.cells[i].LAs[j].probability[1])
-                if self.cells[i].LAs[j].probability[0] > 0.5 or self.cells[j].LAs[i].probability[0] > 0.5: #non-observed
+                if self.cells[i].LAs[j].probability[0] > 0.5 and self.cells[j].LAs[i].probability[0] > 0.5: #non-observed
                     if mat[i][j] == 1: #missing
                         missing_link.append((i, j))
                     else: #non-existent
@@ -57,12 +54,13 @@ class CLA :
         greater = 0
         total_test = 1000
         equal = 0
-        for i in range(total_test) :
+        for i in range(total_test):
             idx_m = randint(0, len(missing_link) - 1)
             idx_n = randint(0, len(non_existent_link) - 1)
 
             score_m = self.__get_score(missing_link[idx_m])
             score_n = self.__get_score(non_existent_link[idx_n])
+
             if score_m > score_n:
                 greater += 1
             elif score_m == score_n:

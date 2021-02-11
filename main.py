@@ -3,10 +3,10 @@ import os
 import datetime
 
 begin_time = datetime.datetime.now()
-node_num = 900
+node_num = 1900
 reward = 0.04
 penalty = 0.01
-iteration = 5
+iteration = 1
 data_path = "./data/"
 
 cla = CLA(node_num, reward, penalty, iteration)
