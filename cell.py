@@ -2,6 +2,7 @@ from la import LA
 from genome import Genome
 
 class Cell:
+    threashold = 0.5
     def __init__(self, sz, penalty, reward, num):
         self._size = sz
         self.penalty = penalty
@@ -10,12 +11,12 @@ class Cell:
         self.neighbor = []
         self.chosen_neighbor = []
         self.num = num
-        for i in range(sz) :
+        for i in range(sz):
             self.LAs.append(LA())
 
         self.genome = Genome([0 for i in range(sz)])
 
-    def update_genome(self , goal):
+    def update_genome(self, goal):
         temp = []
         for l in self.LAs:
             temp.append(l.get_action())
@@ -27,11 +28,10 @@ class Cell:
     def update_chosen_neighbor(self, goal):
         self.chosen_neighbor.clear()
         for other in self.neighbor:
-            if other.genome.fitness(goal[other.num]) > self.genome.fitness(goal[self.num]):
+            if other.genome.fitness(goal[other.num]) > Cell.threashold:
                 self.chosen_neighbor.append(other)
 
     def __update(self, idx, choice, punish):
-
 
         if punish:
             self.LAs[idx].probability[choice] = (1 - self.penalty) * self.LAs[idx].probability[choice]
@@ -40,9 +40,6 @@ class Cell:
 
         self.LAs[idx].probability[1 - choice] = 1 - self.LAs[idx].probability[choice]
 
-        #print(idx, choice, punish, self.LAs[idx].probability[0])
-
-
 
     def update_by_reinforcement_signal(self):
         for idx in range(self._size):
@@ -50,6 +47,7 @@ class Cell:
             zero = 0
 
             for ne in self.chosen_neighbor:
+                print("here")
                 if ne.genome.gene[idx] == 0:
                     zero += 1
                 else:
