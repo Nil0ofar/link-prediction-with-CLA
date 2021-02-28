@@ -1,19 +1,10 @@
-class Genome :
+class Genome:
 
     def __init__(self, gene):
-        self.gene = gene
+        self.gene = set(gene)
 
     def fitness(self, goal):
-        total = 0
-        correct = 0
-
-        for idx in range(len(self.gene)):
-            g = self.gene[idx]
-            if g == 1:
-                total += 1
-                if goal[idx] == 1:
-                    correct += 1
-        if total == 0:
+        # correct predicted links / total predicted links
+        if len(self.gene) == 0:
             return 0
-        #print(correct , total)
-        return correct / len(self.gene)
+        return len(self.gene.intersection(goal)) / len(self.gene)

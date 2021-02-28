@@ -17,7 +17,7 @@ class CLA:
         for it in range(self.iteration):
 
             for i in range(self._size):
-                self.cells[i].update_genome(next_adjacency_matrix[i])
+                self.cells[i].update_genome(next_adjacency_matrix)
 
             for i in range(self._size):
                 self.cells[i].update_chosen_neighbor(next_adjacency_matrix)
@@ -26,10 +26,10 @@ class CLA:
                 self.cells[i].update_by_reinforcement_signal()
 
         for i in range(self._size):
-            self.cells[i].neighbor.clear()
-            for j in range(self._size):
-                if next_adjacency_matrix[i][j] == 1:
-                    self.cells[i].neighbor.append(self.cells[j])
+            self.cells[i].neighbor = set([])
+            for j in next_adjacency_matrix[i]:
+                self.cells[i].neighbor.add(self.cells[j])
+            # print(self.cells[i].neighbor)
 
     def __AUC(self, total, greater, equal):
         return (greater + 0.5 * equal) / total
@@ -40,15 +40,15 @@ class CLA:
     def predict(self, mat):
         missing_link = []
         non_existent_link = []
-        for i in range(self._size):
-            for j in range(i + 1, self._size):
-                if self.cells[i].LAs[j].probability[0] > 0.5 and self.cells[j].LAs[i].probability[0] > 0.5: #non-observed
-                    if mat[i][j] == 1: #missing
-                        missing_link.append((i, j))
-                    else: #non-existent
-                        non_existent_link.append((i, j))
 
-        #print(len(missing_link))
+        for i in range(self._size):
+            for j in range(self._size):
+                if self.cells[i].LAs[j].probability[0] > 0.5 and self.cells[j].LAs[i].probability[0] > 0.5:# non-observed
+                    if j in mat[i]: #missing
+                        missing_link.append((i, j))
+                    elif j not in mat[i]: # non-existent
+                        non_existent_link.append((i, j))
+        # print(len(missing_link))
         if len(missing_link) == 0 or len(non_existent_link) == 0:
             return 0
         greater = 0
