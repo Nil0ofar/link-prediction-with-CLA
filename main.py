@@ -9,7 +9,7 @@ penalty = 0.01
 iteration = 1
 data_path = "./data/"
 
-cla = CLA(node_num, reward, penalty, iteration)
+cla = CLA(node_num, penalty, reward, iteration)
 
 for filename in os.listdir(data_path):
     with open(data_path + filename, 'r') as f:
