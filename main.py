@@ -12,7 +12,7 @@ data_path = "./data/"
 cla = CLA(node_num, penalty, reward, iteration)
 
 
-def makeElementsUniqe(mat):
+def make_elements_unique(mat):
     for i in range(len(mat)):
         mat[i] = list(set(mat[i]))
 
@@ -26,10 +26,10 @@ for filename in os.listdir(data_path):
             mat[x].append(y)
             mat[y].append(x)
 
-        makeElementsUniqe(mat)
+        make_elements_unique(mat)
 
         cla.update(mat)
-        print("AUC : " + str(cla.predict(mat)))
+        print("AUC : " + str(cla.get_AUC(mat)))
 
 print(datetime.datetime.now() - begin_time)
 
