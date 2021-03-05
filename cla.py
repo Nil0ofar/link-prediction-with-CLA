@@ -26,9 +26,9 @@ class CLA:
                 self.cells[i].update_by_reinforcement_signal()
 
         for i in range(self._size):
-            self.cells[i].neighbor = set([])
+            self.cells[i].neighbor = []
             for j in next_adjacency_matrix[i]:
-                self.cells[i].neighbor.add(self.cells[j])
+                self.cells[i].neighbor.append(self.cells[j])
             # print(self.cells[i].neighbor)
 
     def __AUC(self, total, greater, equal):
